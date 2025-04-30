@@ -1,0 +1,670 @@
+/* src/pages/GlobalChat.module.css */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.chatPage {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  background-color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Navbar styles */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px;
+  border-bottom: 1px solid #eee;
+  background-color: #fff;
+  width: 100%;
+  position: relative;
+  z-index: 10;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 16px;
+  flex: 1;
+}
+
+.navLinks {
+  display: flex;
+  gap: 15px;
+  margin-right: 15px;
+}
+
+.navLinks a {
+  text-decoration: none;
+  color: #333;
+  font-size: 13px;
+}
+
+.navLinks a.active {
+  font-weight: bold;
+  color: #000;
+}
+
+.menuIcon {
+  cursor: pointer;
+  font-size: 18px;
+  margin-left: 8px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Chat container */
+.chatContainer {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f5f5;
+  width: 100%;
+  height: calc(100vh - 48px); /* Viewport height minus navbar */
+  overflow: hidden;
+  position: relative;
+}
+
+.messagesContainer {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 8px 10px;
+  width: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.messagesContainer::-webkit-scrollbar {
+  width: 4px;
+}
+
+.messagesContainer::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.messagesContainer::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+}
+
+/* Message styles */
+.messageBubble {
+  display: flex;
+  width: 100%;
+  padding: 6px 8px;
+  border-bottom: 1px solid #e0e0e0;
+  align-items: flex-start;
+  margin-bottom: 0;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  flex-shrink: 0;
+  font-size: 14px;
+  margin-right: 8px;
+  margin-top: 3px;
+}
+
+/* Random avatar colors based on user ID */
+.userA0 { background-color: #FFD1DC; }
+.userB1 { background-color: #B5EAD7; }
+.userC2 { background-color: #C7CEEA; }
+.userD3 { background-color: #FFB7B2; }
+.userE4 { background-color: #FFDAC1; }
+.userF5 { background-color: #E2F0CB; }
+.userG6 { background-color: #DFC2F2; }
+.userH7 { background-color: #A2D2FF; }
+.userI8 { background-color: #FCF6BD; }
+
+.userAndMessage {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.userRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+.username {
+  font-weight: 600;
+  font-size: 12px;
+  color: #333;
+}
+
+.timestamp {
+  font-size: 10px;
+  color: #777;
+  margin-left: auto;
+}
+
+.messageText {
+  word-break: break-word;
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+/* Image container */
+.imageContainer {
+  margin-top: 3px;
+  border-radius: 8px;
+  overflow: hidden;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3px;
+}
+
+.imageContainer img {
+  max-width: 100%;
+  max-height: 160px;
+  border-radius: 6px;
+}
+
+/* Poll container */
+.pollContainer {
+  margin-top: 3px;
+}
+
+.pollContainer p {
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.pollOptions {
+  margin-top: 4px;
+  background-color: #f0f0f0;
+  border-radius: 12px;
+  padding: 6px;
+}
+
+.pollOption {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 6px 8px;
+  margin-bottom: 4px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.pollCircle {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid #333;
+  display: inline-block;
+}
+
+/* Input container */
+.inputContainer {
+  padding: 13px 10px;
+  background-color: #fff;
+  width: 100%;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.inputContainerWrapper {
+  width: 100%;
+  max-width: 600px;
+  position: relative;
+}
+
+.inputWrapper {
+  display: flex;
+  width: 100%;
+  background-color: #f0f0f0;
+  border-radius: 20px;
+  padding: 4px 8px;
+  align-items: center;
+}
+
+.messageInput {
+  flex-grow: 1;
+  padding: 12px 10px;
+  border: none;
+  outline: none;
+  font-size: 13px;
+  background: transparent;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 8px;
+}
+
+.sendButton, 
+.uploadButton, 
+.pollButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.sendButton {
+  background-color: #0084FF;
+}
+
+.uploadButton {
+  background-color: #4CAF50;
+}
+
+.pollButton {
+  background-color: #FF9800;
+}
+
+.sendIcon, 
+.uploadIcon, 
+.pollIcon {
+  color: white;
+  font-size: 12px;
+}
+
+/* Mention suggestions dropdown */
+.mentionsDropdown {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  width: 100%;
+  max-width: 100%;
+  background-color: white;
+  border-radius: 8px 8px 0 0;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 100;
+  margin-bottom: 5px;
+  animation: fadeIn 0.2s ease-out;
+  border: 1px solid #eaeaea;
+}
+
+.mentionItem {
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.mentionItem:hover {
+  background-color: #f5f8ff;
+}
+
+.mentionAvatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #555;
+}
+
+.mentionItem span {
+  font-size: 13px;
+  color: #333;
+}
+
+.mentionHighlight {
+  color: #0084FF;
+  font-weight: bold;
+}
+
+/* Improved Poll modal */
+.pollModalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.pollModal {
+  background-color: white;
+  padding: 20px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.15);
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.pollModal h3 {
+  margin-bottom: 16px;
+  font-size: 18px;
+  color: #333;
+  text-align: center;
+}
+
+.pollFormGroup {
+  margin-bottom: 16px;
+}
+
+.pollFormGroup label {
+  display: block;
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.pollQuestionInput {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.pollQuestionInput:focus {
+  outline: none;
+  border-color: #0084FF;
+}
+
+.pollOptionsList {
+  margin-bottom: 12px;
+  max-height: 160px;
+  overflow-y: auto;
+}
+
+.pollOptionItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f0f7ff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.removeOptionBtn {
+  background: none;
+  border: none;
+  color: #ff5252;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.addOptionContainer {
+  display: flex;
+  gap: 8px;
+}
+
+.newOptionInput {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.newOptionInput:focus {
+  outline: none;
+  border-color: #0084FF;
+}
+
+.addOptionBtn {
+  background-color: #e0e0e0;
+  color: #333;
+  border: none;
+  border-radius: 6px;
+  padding: 0 12px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.addOptionBtn:not(:disabled):hover {
+  background-color: #d0d0d0;
+}
+
+.addOptionBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pollModalActions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.pollModalActions button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.cancelBtn {
+  background-color: #f0f0f0;
+  color: #555;
+}
+
+.cancelBtn:hover {
+  background-color: #e0e0e0;
+}
+
+.createBtn {
+  background-color: #0084FF;
+  color: white;
+}
+
+.createBtn:not(:disabled):hover {
+  background-color: #0073e6;
+}
+
+.createBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.emptyOptionsMessage {
+  padding: 10px;
+  text-align: center;
+  color: #777;
+  font-size: 13px;
+  background-color: #f8f8f8;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+/* Media queries for responsive design */
+@media (min-width: 768px) {
+  .chatPage {
+    max-width: 100%;
+  }
+  
+  .chatContainer {
+    height: calc(100vh - 48px);
+  }
+
+  .avatar {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .username {
+    font-size: 13px;
+  }
+  
+  .messageText {
+    font-size: 14px;
+  }
+  
+  .mentionsDropdown {
+    max-width: 350px;
+  }
+}
+
+/* For mobile devices */
+@media (max-width: 767px) {
+  .navbar {
+    padding: 10px 12px;
+  }
+  
+  .logo {
+    font-size: 15px;
+  }
+  
+  .navLinks {
+    gap: 12px;
+  }
+  
+  .chatContainer {
+    height: calc(100vh - 42px);
+  }
+  
+  .messageBubble {
+    padding: 5px 6px;
+  }
+  
+  .avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+    margin-right: 6px;
+  }
+  
+  .username {
+    font-size: 11px;
+  }
+  
+  .messageText {
+    font-size: 12px;
+  }
+  
+  .timestamp {
+    font-size: 9px;
+  }
+  
+  .inputWrapper {
+    padding: 3px 6px;
+  }
+  
+  .messageInput {
+    padding: 5px 8px;
+    font-size: 12px;
+  }
+  
+  .actionButtons {
+    gap: 6px;
+  }
+  
+  .sendButton, 
+  .uploadButton, 
+  .pollButton {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .pollModal {
+    padding: 16px;
+    border-radius: 12px;
+  }
+  
+  .pollModal h3 {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+  
+  .pollFormGroup {
+    margin-bottom: 12px;
+  }
+  
+  .pollQuestionInput,
+  .newOptionInput {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+  
+  .pollOptionItem {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+  
+  .pollModalActions button {
+    padding: 8px;
+    font-size: 13px;
+  }
+  
+  .mentionsDropdown {
+    max-width: 95%;
+  }
+  
+  .mentionItem {
+    padding: 6px 8px;
+  }
+  
+  .mentionAvatar {
+    width: 24px;
+    height: 24px;
+    font-size: 11px;
+  }
+}

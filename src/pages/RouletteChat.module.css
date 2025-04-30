@@ -1,0 +1,266 @@
+.rouletteChatContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #f7f9fc;
+}
+
+.chatPageContent {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 16px;
+  max-width: 1000px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.chatHeader {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.chatHeader h2 {
+  font-size: 24px;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.searchingText {
+  color: #777;
+  font-style: italic;
+}
+
+.connectedText {
+  color: #4CAF50;
+  font-weight: 500;
+}
+
+.disconnectedText {
+  color: #f44336;
+  font-weight: 500;
+}
+
+.chatWindow {
+  flex: 1;
+  background-color: white;
+  border-radius: 12px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  min-height: 400px;
+}
+
+.searchingIndicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 16px;
+  color: #777;
+}
+
+.disconnectNotice {
+  text-align: center;
+  padding: 24px;
+  color: #555;
+}
+
+.findNewButton {
+  margin-top: 16px;
+  padding: 8px 16px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.findNewButton:hover {
+  background-color: #388E3C;
+}
+
+.messagesContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.emptyChat {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #777;
+  font-style: italic;
+}
+
+.chatControls {
+  display: flex;
+  gap: 8px;
+}
+
+.messageForm {
+  display: flex;
+  flex: 1;
+  gap: 8px;
+}
+
+.messageInput {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: 24px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  outline: none;
+}
+
+.messageInput:focus {
+  border-color: #2196F3;
+}
+
+.sendButton {
+  padding: 0 20px;
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 24px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.sendButton:hover:not(:disabled) {
+  background-color: #1976D2;
+}
+
+.sendButton:disabled {
+  background-color: #B0BEC5;
+  cursor: not-allowed;
+}
+
+.skipButton {
+  padding: 0 20px;
+  background-color: #FF5722;
+  color: white;
+  border: none;
+  border-radius: 24px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.skipButton:hover:not(:disabled) {
+  background-color: #E64A19;
+}
+
+.skipButton:disabled {
+  background-color: #FFCCBC;
+  cursor: not-allowed;
+}
+
+.messageInputContainer {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.filterWarning {
+  position: absolute;
+  bottom: -20px;
+  left: 0;
+  font-size: 0.75rem;
+  color: #ff6b6b;
+  background-color: rgba(255, 107, 107, 0.1);
+  padding: 2px 8px;
+  border-radius: 4px;
+  width: 100%;
+  z-index: 10;
+}
+
+
+/* Message bubble styles for roulette chat */
+.messageBubble {
+  max-width: 70%;
+  padding: 10px 14px;
+  border-radius: 18px;
+  margin-bottom: 6px;
+  position: relative;
+  word-break: break-word;
+}
+
+.ownMessage {
+  align-self: flex-end;
+  background-color: #e3f2fd;
+  margin-left: auto;
+  border-bottom-right-radius: 4px;
+}
+
+.partnerMessage {
+  align-self: flex-start;
+  background-color: #f1f1f1;
+  margin-right: auto;
+  border-bottom-left-radius: 4px;
+}
+
+.messageContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.messageText {
+  font-size: 14px;
+  color: #333;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.messageTime {
+  font-size: 10px;
+  color: #777;
+  margin-top: 4px;
+  align-self: flex-end;
+}
+
+/* Media queries for responsive design */
+@media (max-width: 767px) {
+  .chatPageContent {
+    padding: 8px;
+  }
+  
+  .chatHeader h2 {
+    font-size: 20px;
+  }
+  
+  .chatWindow {
+    padding: 12px;
+    min-height: 300px;
+  }
+  
+  .messageBubble {
+    max-width: 80%;
+    padding: 8px 12px;
+  }
+  
+  .messageText {
+    font-size: 13px;
+  }
+  
+  .chatControls {
+    gap: 6px;
+  }
+  
+  .messageInput {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+  
+  .sendButton, .skipButton {
+    padding: 0 16px;
+    font-size: 13px;
+  }
+}

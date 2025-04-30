@@ -1,0 +1,273 @@
+/* src/pages/OtpVerification.module.css */
+.containerWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  background-color: #f7f9fc;
+}
+
+.bgAnimation {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+.container {
+  width: 100%;
+  max-width: 450px;
+  position: relative;
+  background-color: white;
+  border-radius: 24px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  z-index: 1;
+}
+
+.backButtonContainer {
+  padding: 20px 0 0 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+}
+
+.backButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.backButton:hover {
+  background-color: #f0f2f5;
+  transform: translateY(-2px);
+}
+
+.content {
+  padding: 40px 30px 40px;
+  text-align: center;
+}
+
+.logoContainer {
+  margin-bottom: 20px;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: #5073e5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logoIcon {
+  margin-right: 10px;
+  font-size: 24px;
+}
+
+.headingContainer {
+  margin-bottom: 32px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.gradientText {
+  background: linear-gradient(135deg, #5073e5 0%, #7b68ee 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.iconWrapper {
+  color: #5073e5;
+  display: flex;
+  align-items: center;
+}
+
+.subtitle {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+.securityNote {
+  display: inline-flex;
+  align-items: center;
+  background-color: #e6f7ef;
+  color: #0c8b54;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.securityIcon {
+  margin-right: 6px;
+}
+
+.otpContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  gap: 8px;
+  width: 100%;
+}
+
+.otpInput {
+  flex: 1;
+  height: 60px;
+  width: 100%;
+  max-width: 50px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 24px;
+  text-align: center;
+  background-color: #f9f9f9;
+  color: #333;
+  transition: all 0.2s ease;
+}
+
+.otpInput:focus {
+  border-color: #5073e5;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(80, 115, 229, 0.2);
+}
+
+.errorText {
+  color: #e74c3c;
+  font-size: 14px;
+  margin: -15px 0 20px;
+}
+
+.verifyButton {
+  width: 100%;
+  padding: 16px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #5073e5 0%, #7b68ee 100%);
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(80, 115, 229, 0.3);
+}
+
+.verifyButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(80, 115, 229, 0.4);
+}
+
+.verifyButton:active {
+  transform: translateY(0);
+}
+
+.resendText {
+  font-size: 14px;
+  color: #666;
+}
+
+.resendLink {
+  color: #999;
+  cursor: default;
+  font-weight: 500;
+}
+
+.resendLinkActive {
+  color: #5073e5;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.resendLinkActive:hover {
+  text-decoration: underline;
+}
+
+/* Mobile Responsive Fixes */
+@media screen and (max-width: 480px) {
+  .container {
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .content {
+    padding: 30px 20px;
+  }
+  
+  .title {
+    font-size: 24px;
+  }
+  
+  .subtitle {
+    font-size: 14px;
+  }
+  
+  .otpContainer {
+    gap: 6px;
+  }
+  
+  .otpInput {
+    height: 50px;
+    max-width: 40px;
+    font-size: 20px;
+    border-radius: 8px;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 767px) {
+  .otpInput {
+    max-width: 45px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 500px;
+  }
+
+  .title {
+    font-size: 32px;
+  }
+
+  .subtitle {
+    font-size: 18px;
+  }
+
+  .otpInput {
+    height: 65px;
+    max-width: 60px;
+    font-size: 28px;
+  }
+
+  .verifyButton {
+    padding: 16px;
+    font-size: 18px;
+  }
+}

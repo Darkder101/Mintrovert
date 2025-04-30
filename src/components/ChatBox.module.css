@@ -1,0 +1,69 @@
+.chatBox {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+}
+
+.messagesList {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+}
+
+.inputArea {
+  display: flex;
+  padding: 8px 12px;
+  border-top: 1px solid #e0e0e0;
+  background: white;
+}
+
+.messageInput {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 18px;
+  outline: none;
+  font-size: 13px;
+}
+
+.sendButton {
+  width: 32px;
+  height: 32px;
+  background: #333;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  margin-left: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sendButton span {
+  font-size: 16px;
+}
+
+@media (max-width: 767px) {
+  .inputArea {
+    padding: 6px 10px;
+  }
+  
+  .messageInput {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  
+  .sendButton {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .sendButton span {
+    font-size: 14px;
+  }
+}

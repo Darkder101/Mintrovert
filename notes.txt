@@ -1,0 +1,34 @@
+Later 
+
+🔥 #9 Real Phone OTP setup
+Set up proper Firebase auth + reCAPTCHA in production mode. (visa , mastercard)
+
+🔥 #11 Don’t store global/private chat permanently
+Use onDisconnect().remove() or temporary node strategy in Firebase. (24 hrs deletation implementation. at testing phase.)
+
+🧩 #1 Implement Dark Mode toggle (can be localStorage-based)
+
+🔥 #16 Add notification system (e.g. 1st visit toast, or Firebase + local notifications)
+
+🔥 #10 if users sets gender male then profile should be blue if girl then pink 
+
+🔥 #10 add admin page. 
+
+Today 
+
+🧩 #13 if user delete account then confession , private chats , anyanomus name all needs to wipe out from database.
+
+🧩 #13 if user wants to delete account ask username and password in popup. 
+
+🧩 #17 Implement @mention in global chat input logic
+
+🧩 #18 Blocked unblocked messages UI upgradation. 
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,365 @@
+/* src/components/ProfileTransition.module.css */
+.transitionContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #fcfcfc;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    z-index: 10000;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+}
+
+.bgAnimation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(-45deg, #ffffff, #f2f6ff, #fff6fb, #ffffff);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+    z-index: -1;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    padding: 0 20px;
+    box-sizing: border-box;
+    /* Added to ensure better centering */
+    max-width: 100%;
+}
+
+.logoContainer {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    width: 100%;
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logoIcon {
+    font-size: 24px;
+    margin-right: 8px;
+}
+
+.identityCard {
+    background-color: white;
+    border-radius: 24px;
+    padding: 30px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    width: 90%;
+    max-width: 400px;
+    min-height: 330px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* Changed position to be properly centered */
+    position: relative;
+    margin: 0 auto;
+    /* Removed the transform that was causing positioning issues */
+}
+
+.anonCard {
+    background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+    border: 2px solid rgba(122, 155, 255, 0.2);
+}
+
+.title {
+    font-size: 24px;
+    margin-bottom: 25px;
+    color: #333;
+    font-weight: 600;
+}
+
+.subtitle {
+    color: #666;
+    font-weight: 400;
+    margin-top: 15px;
+    font-size: 16px;
+}
+
+.avatarWrapper {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 42px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.anonAvatar {
+    animation: pulse 2s infinite;
+}
+
+.continueButton {
+    margin-top: 30px;
+    background: linear-gradient(90deg, #7a9bff 0%, #4361ee 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(67, 97, 238, 0.2);
+    transition: all 0.3s ease;
+}
+
+.continueButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(67, 97, 238, 0.3);
+}
+
+.continueButton:active {
+    transform: translateY(0);
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(122, 155, 255, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 15px rgba(122, 155, 255, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(122, 155, 255, 0);
+    }
+}
+
+.avatarText {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.realName, .anonName {
+    font-size: 22px;
+    margin: 5px 0;
+    font-weight: 600;
+}
+
+.anonName {
+    color: #4361ee;
+    background: linear-gradient(135deg, #4361ee 0%, #7a9bff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.transformIcon {
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.sparkle {
+    font-size: 64px;
+    animation: spin 2s infinite linear;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg) scale(1);
+        opacity: 0.8;
+    }
+    50% {
+        transform: rotate(180deg) scale(1.2);
+        opacity: 1;
+    }
+    100% {
+        transform: rotate(360deg) scale(1);
+        opacity: 0.8;
+    }
+}
+
+.progressBar {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 300px;
+    height: 6px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    background: linear-gradient(90deg, #7a9bff 0%, #4361ee 100%);
+    border-radius: 3px;
+}
+
+/* Improved Mobile responsiveness */
+@media (max-width: 480px) {
+    .identityCard {
+        width: 85%;
+        min-height: 320px;
+        padding: 25px 20px;
+    }
+    
+    .logoContainer {
+        top: 25px;
+    }
+    
+    .logo {
+        font-size: 24px;
+    }
+    
+    .title {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .avatar {
+        width: 80px;
+        height: 80px;
+        font-size: 32px;
+    }
+    
+    .transformIcon {
+        width: 90px;
+        height: 90px;
+    }
+    
+    .sparkle {
+        font-size: 48px;
+    }
+    
+    .realName, .anonName {
+        font-size: 18px;
+    }
+    
+    .subtitle {
+        font-size: 14px;
+    }
+    
+    .continueButton {
+        padding: 10px 24px;
+        font-size: 15px;
+    }
+}
+
+/* For very small screens */
+@media (max-width: 360px) {
+    .identityCard {
+        width: 90%;
+        padding: 20px 15px;
+        min-height: 280px;
+    }
+    
+    .logo {
+        font-size: 22px;
+    }
+    
+    .logoIcon {
+        font-size: 20px;
+    }
+    
+    .title {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+    
+    .avatar {
+        width: 70px;
+        height: 70px;
+        font-size: 28px;
+    }
+    
+    .subtitle {
+        font-size: 13px;
+    }
+}
+
+/* Handle landscape orientation on mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+    .logoContainer {
+        top: 15px;
+    }
+    
+    .logo {
+        font-size: 20px;
+    }
+    
+    .identityCard {
+        min-height: auto;
+        padding: 15px;
+    }
+    
+    .title {
+        margin-bottom: 10px;
+    }
+    
+    .avatar {
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+        margin-bottom: 5px;
+    }
+    
+    .progressBar {
+        bottom: 15px;
+    }
+    
+    .transformIcon {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .sparkle {
+        font-size: 36px;
+    }
+}

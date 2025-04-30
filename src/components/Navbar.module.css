@@ -1,0 +1,355 @@
+/* src/components/Navbar.module.css */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #eee;
+  background-color: #fff;
+  width: 100%;
+  position: relative;
+  z-index: 10;
+}
+
+.logoContainer {
+  flex: 1;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;
+  color: #007bff;
+}
+
+.tabs {
+  display: flex;
+  gap: 20px;
+  margin-right: 20px;
+}
+
+.tab {
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 5px 0;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.tab:hover {
+  color: #007bff;
+  border-bottom-color: #007bff;
+}
+
+/* Hamburger menu styles */
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 24px;
+  height: 18px;
+  cursor: pointer;
+  z-index: 101;
+}
+
+.hamburgerLine {
+  width: 100%;
+  height: 2px;
+  background-color: #333;
+  transition: all 0.3s ease;
+}
+
+/* Menu overlay and menu */
+.menuOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 200;
+}
+
+.menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 280px;
+  background-color: #222;
+  z-index: 300;
+  padding: 20px 0;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.menuHeader {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 20px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.menuClose {
+  font-size: 24px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.userAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #007bff;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin-right: 12px;
+}
+
+.userName {
+  color: #fff;
+  font-weight: 500;
+}
+
+.menuItems {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.menuItem:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.menuIcon {
+  margin-right: 12px;
+  font-size: 18px;
+}
+
+.navLinks {
+  display: flex;
+  gap: 20px;
+  margin-right: 20px;
+}
+
+.navLinks span {
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.navLinks .active {
+  font-weight: bold;
+  color: #000;
+}
+
+.menuIcon {
+  cursor: pointer;
+  font-size: 20px;
+  margin-left: 10px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dimmed {
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+/* Ad container */
+.adContainer {
+  height: 90px;
+  width: 100%;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #888;
+  font-size: 14px;
+  text-align: center;
+}
+
+.onlineCount {
+  padding: 0 5px;
+  display: flex;
+  align-items: center;
+  color: #4caf50;
+  font-size: 0.85rem;
+}
+
+/* Delete Account specific styles */
+.dangerItem {
+  color: #ff5252 !important;
+  margin-top: auto; /* Push to bottom */
+}
+
+.dangerItem:hover {
+  background-color: rgba(255, 82, 82, 0.15) !important;
+}
+
+/* Delete confirmation overlay */
+.deleteConfirmOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 400;
+}
+
+.deleteConfirmBox {
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  padding: 20px;
+  width: 85%;
+  max-width: 300px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.deleteConfirmBox h3 {
+  color: #ff5252;
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.deleteConfirmBox p {
+  margin-bottom: 20px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #fff;
+}
+
+.deleteConfirmButtons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.cancelButton, .deleteButton {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  flex: 1;
+}
+
+.cancelButton {
+  background-color: #424242;
+  color: white;
+}
+
+.deleteButton {
+  background-color: #ff5252;
+  color: white;
+}
+
+.deleteButton:disabled {
+  background-color: #963535;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.errorMessage {
+  background-color: rgba(255, 82, 82, 0.15);
+  border-left: 3px solid #ff5252;
+  padding: 8px 12px;
+  margin-bottom: 15px;
+  font-size: 13px;
+  color: #ffa3a3;
+}
+
+/* New form styles for account deletion */
+.inputGroup {
+  margin-bottom: 16px;
+}
+
+.inputGroup label {
+  display: block;
+  margin-bottom: 6px;
+  color: #ddd;
+  font-size: 14px;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #444;
+  background-color: #333;
+  color: white;
+  font-size: 14px;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #555;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.input::placeholder {
+  color: #777;
+}
+
+.deleteConfirmNote {
+  font-size: 12px;
+  color: #ff8a8a;
+  margin-bottom: 16px;
+  font-style: italic;
+}
+
+/* Media queries for responsive design */
+@media (max-width: 767px) {
+  .navbar {
+    padding: 12px 15px;
+  }
+  
+  .logo {
+    font-size: 16px;
+  }
+  
+  .navLinks {
+    gap: 15px;
+  }
+  
+  .adContainer {
+    height: 60px; /* Smaller ad container for mobile */
+  }
+  
+  /* Ensure hamburger is visible on mobile */
+  .hamburger {
+    display: flex;
+  }
+}

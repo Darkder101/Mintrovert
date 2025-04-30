@@ -1,0 +1,325 @@
+/* src/pages/ConfessionBox.module.css */
+.container {
+  position: relative;
+  min-height: 100vh;
+  background-color: #f5f7fb;
+  padding-bottom: 80px;
+}
+
+.confessionBoxHeader {
+  text-align: center;
+  padding: 2rem 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.confessionBoxHeader h1 {
+  font-size: 2.2rem;
+  background: linear-gradient(135deg, #5c6bc0, #7986cb);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+.confessionBoxHeader p {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+/* Grid layout for confessions - 3 in a row */
+.confessionsGrid {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.confessionCard {
+  background-color: #202020;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.confessionCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.newConfession {
+  position: relative;
+}
+
+.newBadge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #ff6b6b;
+  color: white;
+  font-size: 0.8rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.confessionContent {
+  padding: 1.5rem;
+  flex: 1;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+}
+
+.confessionContent p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #ffffff;
+  flex: 1;
+}
+
+.readMore {
+  color: #7986cb;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  align-self: flex-end;
+}
+
+.userAvatar {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.avatarCircle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.username {
+  color: rgba(255, 239, 239, 0.8);
+  font-size: 0.9rem;
+}
+
+.confessionMeta {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.85rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.timestamp {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Floating Action Button */
+.newConfessionBtn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #5c6bc0, #7986cb);
+  color: white;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  z-index: 5; /* Reduced from 10 to ensure it stays behind NavbarMenu */
+}
+
+.newConfessionBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+}
+
+/* Modal Styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 1rem;
+}
+
+.modalContent {
+  background-color: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 500px;
+  padding: 2rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.modalContent h2 {
+  font-size: 1.5rem;
+  color: #5c6bc0;
+  margin-bottom: 0.5rem;
+}
+
+.modalContent p {
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.confessionInput {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  resize: none;
+  font-family: inherit;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.cancelBtn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  background-color: #f0f0f0;
+  color: #555;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.cancelBtn:hover {
+  background-color: #e0e0e0;
+}
+
+.submitBtn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #5c6bc0, #7986cb);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.submitBtn:hover {
+  opacity: 0.9;
+}
+
+.submitBtn:disabled, .cancelBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+}
+
+/* Full Confession Modal */
+.fullConfessionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.fullConfessionTimestamp {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.fullConfessionBody {
+  margin-bottom: 2rem;
+}
+
+.fullConfessionBody p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #333;
+  white-space: pre-line;
+}
+
+.closeBtn {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 8px;
+  background-color: #f0f0f0;
+  color: #555;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  text-align: center;
+  transition: background-color 0.2s;
+}
+
+.closeBtn:hover {
+  background-color: #e0e0e0;
+}
+
+/* Responsive styles */
+@media (max-width: 1200px) {
+  .confessionsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .confessionBoxHeader h1 {
+    font-size: 1.8rem;
+  }
+  
+  .confessionBoxHeader p {
+    font-size: 1rem;
+  }
+  
+  .modalContent {
+    padding: 1.5rem;
+  }
+  
+  .newConfessionBtn {
+    width: 50px;
+    height: 50px;
+    font-size: 1.6rem;
+    bottom: 1.5rem;
+    right: 1.5rem;
+  }
+  
+  .confessionsGrid {
+    grid-template-columns: 1fr;
+  }
+}
