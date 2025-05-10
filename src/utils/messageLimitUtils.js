@@ -3,7 +3,7 @@ import { rtdb } from '../firebase/config';
 import { ref, get, update, query, orderByChild } from 'firebase/database';
 
 // Constants
-export const MESSAGE_LIMIT = 30; // Maximum number of messages to keep
+export const MESSAGE_LIMIT = 15; // Maximum number of messages to keep
 
 /**
  * Enforces the message limit for global chat by deleting oldest messages if needed
