@@ -3,7 +3,7 @@ const admin = require('firebase-admin');
 const cron = require('node-cron');
 
 // Constants
-const MESSAGE_LIMIT = 15; // Maximum number of messages to keep
+const MESSAGE_LIMIT = 30; // Maximum number of messages to keep
 
 // Initialize message cleanup service
 const initMessageCleanupService = () => {
