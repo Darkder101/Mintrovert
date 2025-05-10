@@ -4,21 +4,9 @@ const cron = require('node-cron');
 
 // Constants
 const MESSAGE_LIMIT = 30; // Maximum number of messages to keep
-const MESSAGE_RETENTION_HOURS = 24; // Keep messages for 24 hours
 
 // Initialize message cleanup service
 const initMessageCleanupService = () => {
-  // Schedule the cleanup to run every day at midnight (00:00)
-  cron.schedule('0 0 * * *', async () => {
-    console.log('Running scheduled global message cleanup...');
-    try {
-      await cleanupGlobalMessages();
-      console.log('Global message cleanup completed successfully');
-    } catch (error) {
-      console.error('Error during global message cleanup:', error);
-    }
-  });
-  
   // Schedule the message limit enforcement to run every hour
   cron.schedule('0 * * * *', async () => {
     console.log('Running scheduled message limit enforcement...');
@@ -54,38 +42,6 @@ const setupMessageLimitTrigger = () => {
       console.error('Error in real-time message limit enforcement:', error);
     }
   });
-};
-
-// Function to clean up messages older than 24 hours
-const cleanupGlobalMessages = async () => {
-  const cutoffTime = new Date();
-  cutoffTime.setHours(cutoffTime.getHours() - MESSAGE_RETENTION_HOURS);
-  const cutoffTimeISO = cutoffTime.toISOString();
-  
-  // Get reference to global messages
-  const messagesRef = admin.database().ref('globalMessages');
-  
-  // Query for messages older than the cutoff time
-  const oldMessagesSnapshot = await messagesRef
-    .orderByChild('timestamp')
-    .endAt(cutoffTimeISO)
-    .once('value');
-  
-  if (!oldMessagesSnapshot.exists()) {
-    return;
-  }
-  
-  // Get the messages to delete
-  const messagesToDelete = {};
-  oldMessagesSnapshot.forEach((childSnapshot) => {
-    messagesToDelete[childSnapshot.key] = null;
-  });
-  
-  // Delete the old messages
-  if (Object.keys(messagesToDelete).length > 0) {
-    await messagesRef.update(messagesToDelete);
-    console.log(`Deleted ${Object.keys(messagesToDelete).length} old global messages`);
-  }
 };
 
 // Function to enforce the message limit
@@ -140,6 +96,5 @@ const enforceMessageLimit = async () => {
 
 module.exports = {
   initMessageCleanupService,
-  cleanupGlobalMessages,
   enforceMessageLimit
 };

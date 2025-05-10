@@ -3,7 +3,7 @@ import styles from './GlobalChat.module.css';
 import Navbar from '../components/Navbar';
 import { useAuth } from '../context/AuthContext';
 import { rtdb } from '../firebase/config';
-import { ref, push, onValue, set, query, orderByChild, startAt, get } from 'firebase/database';
+import { ref, push, onValue, set, query, orderByChild, get } from 'firebase/database';
 import { useContext } from 'react';
 import { OnlineUsersContext } from '../App';
 import MessageBubble from '../components/MessageBubble';
@@ -48,22 +48,11 @@ const GlobalChat = () => {
       }
     }
 
-    // Get the current time
-    const now = new Date();
-    
-    // Calculate the timestamp for 24 hours ago
-    const oneDayAgo = new Date(now.getTime() - (24 * 60 * 60 * 1000));
-    const oneDayAgoISO = oneDayAgo.toISOString();
-    
-    // Listen for messages in the global chat, only showing messages from the last 24 hours
+    // Listen for all messages in the global chat
     const messagesRef = ref(rtdb, 'globalMessages');
-    const recentMessagesQuery = query(
-      messagesRef,
-      orderByChild('timestamp'),
-      startAt(oneDayAgoISO)
-    );
+    const messagesQuery = query(messagesRef, orderByChild('timestamp'));
     
-    const unsubscribe = onValue(recentMessagesQuery, (snapshot) => {
+    const unsubscribe = onValue(messagesQuery, (snapshot) => {
       if (snapshot.exists()) {
         const messagesData = snapshot.val();
         const messageList = Object.keys(messagesData).map(key => ({
@@ -134,11 +123,6 @@ const GlobalChat = () => {
     };
   }, []);
 
-  // Debug log to check online users
-  useEffect(() => {
-    console.log("Online users:", onlineUsers);
-  }, [onlineUsers]);
-
   const openPollModal = () => {
     setPollQuestion('');
     setPollOptions([]);
@@ -172,18 +156,23 @@ const GlobalChat = () => {
         mentions: mentions.length > 0 ? mentions : null
       };
       
-      // Push the message to Firebase Realtime Database
-      const messagesRef = ref(rtdb, 'globalMessages');
-      await push(messagesRef, messageData);
-      
-      // After sending, the server-side trigger will enforce the message limit
-      // but we'll also check client-side as a fallback
-      const messagesSnapshot = await get(messagesRef);
-      if (messagesSnapshot.exists() && Object.keys(messagesSnapshot.val()).length > MESSAGE_LIMIT) {
-        await enforceMessageLimit();
+      try {
+        // Push the message to Firebase Realtime Database
+        const messagesRef = ref(rtdb, 'globalMessages');
+        await push(messagesRef, messageData);
+        
+        // Check if we need to enforce message limit client-side
+        const messagesSnapshot = await get(messagesRef);
+        if (messagesSnapshot.exists() && Object.keys(messagesSnapshot.val()).length > MESSAGE_LIMIT) {
+          console.log("Message limit exceeded, triggering client-side enforcement");
+          await enforceMessageLimit();
+        }
+        
+        setInput('');
+      } catch (error) {
+        console.error("Error sending message:", error);
+        alert("Failed to send message. Please try again.");
       }
-      
-      setInput('');
     }
   };
 
@@ -230,7 +219,6 @@ const GlobalChat = () => {
         
         // Filter online users based on the query
         if (onlineUsers && onlineUsers.length > 0) {
-          console.log("Finding matches for:", query);
           const filteredUsers = onlineUsers
             .filter(user => {
               // Get display name for comparison
@@ -239,11 +227,9 @@ const GlobalChat = () => {
             })
             .slice(0, 5); // Limit to 5 suggestions
           
-          console.log("Filtered users:", filteredUsers);
           setMentionSuggestions(filteredUsers);
           setShowMentions(filteredUsers.length > 0);
         } else {
-          console.log("No online users available");
           setShowMentions(false);
         }
       } else {
@@ -287,26 +273,30 @@ const GlobalChat = () => {
       if (['image/jpeg', 'image/png'].includes(file.type)) {
         const reader = new FileReader();
         reader.onload = async (event) => {
-          // Use anonymous name if available, otherwise fall back to display name or user ID
-          const displayName = anonName || (currentUser?.displayName || userId);
-          
-          const imageData = {
-            userId: userId,
-            username: displayName,
-            type: 'image',
-            imageUrl: event.target.result,
-            timestamp: new Date().toISOString()
-          };
-          
-          // Push the image to Firebase Realtime Database
-          const messagesRef = ref(rtdb, 'globalMessages');
-          await push(messagesRef, imageData);
-          
-          // After sending, the server-side trigger will enforce the message limit
-          // but we'll also check client-side as a fallback
-          const messagesSnapshot = await get(messagesRef);
-          if (messagesSnapshot.exists() && Object.keys(messagesSnapshot.val()).length > MESSAGE_LIMIT) {
-            await enforceMessageLimit();
+          try {
+            // Use anonymous name if available, otherwise fall back to display name or user ID
+            const displayName = anonName || (currentUser?.displayName || userId);
+            
+            const imageData = {
+              userId: userId,
+              username: displayName,
+              type: 'image',
+              imageUrl: event.target.result,
+              timestamp: new Date().toISOString()
+            };
+            
+            // Push the image to Firebase Realtime Database
+            const messagesRef = ref(rtdb, 'globalMessages');
+            await push(messagesRef, imageData);
+            
+            // Check if we need to enforce message limit client-side
+            const messagesSnapshot = await get(messagesRef);
+            if (messagesSnapshot.exists() && Object.keys(messagesSnapshot.val()).length > MESSAGE_LIMIT) {
+              await enforceMessageLimit();
+            }
+          } catch (error) {
+            console.error("Error uploading image:", error);
+            alert("Failed to upload image. Please try again.");
           }
         };
         reader.readAsDataURL(file);
@@ -358,66 +348,75 @@ const GlobalChat = () => {
       return;
     }
     
-    // Use anonymous name if available, otherwise fall back to display name or user ID
-    const displayName = anonName || (currentUser?.displayName || userId);
-    
-    // Filter sensitive content in poll question
-    const filteredQuestion = filterSensitiveContent(pollQuestion.trim());
-    
-    // Create an options object with each option initialized to 0 votes
-    const optionsObj = {};
-    pollOptions.forEach(option => {
-      optionsObj[option] = 0;
-    });
-    
-    const pollData = {
-      userId: userId,
-      username: displayName,
-      type: 'poll',
-      question: filteredQuestion,
-      options: optionsObj,
-      timestamp: new Date().toISOString(),
-      voters: {}
-    };
-    
-    // Push the poll to Firebase Realtime Database
-    const messagesRef = ref(rtdb, 'globalMessages');
-    await push(messagesRef, pollData);
-    
-    // After creating the poll, the server-side trigger will enforce the message limit
-    // but we'll also check client-side as a fallback
-    const messagesSnapshot = await get(messagesRef);
-    if (messagesSnapshot.exists() && Object.keys(messagesSnapshot.val()).length > MESSAGE_LIMIT) {
-      await enforceMessageLimit();
+    try {
+      // Use anonymous name if available, otherwise fall back to display name or user ID
+      const displayName = anonName || (currentUser?.displayName || userId);
+      
+      // Filter sensitive content in poll question
+      const filteredQuestion = filterSensitiveContent(pollQuestion.trim());
+      
+      // Create an options object with each option initialized to 0 votes
+      const optionsObj = {};
+      pollOptions.forEach(option => {
+        optionsObj[option] = 0;
+      });
+      
+      const pollData = {
+        userId: userId,
+        username: displayName,
+        type: 'poll',
+        question: filteredQuestion,
+        options: optionsObj,
+        timestamp: new Date().toISOString(),
+        voters: {}
+      };
+      
+      // Push the poll to Firebase Realtime Database
+      const messagesRef = ref(rtdb, 'globalMessages');
+      await push(messagesRef, pollData);
+      
+      // Check if we need to enforce message limit client-side
+      const messagesSnapshot = await get(messagesRef);
+      if (messagesSnapshot.exists() && Object.keys(messagesSnapshot.val()).length > MESSAGE_LIMIT) {
+        await enforceMessageLimit();
+      }
+      
+      // Reset form and close modal
+      setPollQuestion('');
+      setPollOptions([]);
+      setShowPollModal(false);
+    } catch (error) {
+      console.error("Error creating poll:", error);
+      alert("Failed to create poll. Please try again.");
     }
-    
-    // Reset form and close modal
-    setPollQuestion('');
-    setPollOptions([]);
-    setShowPollModal(false);
   };
 
   const votePoll = (messageId, option) => {
     const message = messages.find(msg => msg.id === messageId);
     if (!message) return;
     
-    // Create a copy of the message to update
-    const updatedMessage = { ...message };
-    
-    // Prevent double voting
-    if (updatedMessage.voters && updatedMessage.voters[userId]) {
-      const prevVote = updatedMessage.voters[userId];
-      updatedMessage.options[prevVote]--;
+    try {
+      // Create a copy of the message to update
+      const updatedMessage = { ...message };
+      
+      // Prevent double voting
+      if (updatedMessage.voters && updatedMessage.voters[userId]) {
+        const prevVote = updatedMessage.voters[userId];
+        updatedMessage.options[prevVote]--;
+      }
+      
+      // Add new vote
+      updatedMessage.options[option]++;
+      if (!updatedMessage.voters) updatedMessage.voters = {};
+      updatedMessage.voters[userId] = option;
+      
+      // Update the poll in Firebase Realtime Database
+      const pollRef = ref(rtdb, `globalMessages/${messageId}`);
+      set(pollRef, updatedMessage);
+    } catch (error) {
+      console.error("Error voting in poll:", error);
+      alert("Failed to register your vote. Please try again.");
     }
-    
-    // Add new vote
-    updatedMessage.options[option]++;
-    if (!updatedMessage.voters) updatedMessage.voters = {};
-    updatedMessage.voters[userId] = option;
-    
-    // Update the poll in Firebase Realtime Database
-    const pollRef = ref(rtdb, `globalMessages/${messageId}`);
-    set(pollRef, updatedMessage);
   };
 
   return (

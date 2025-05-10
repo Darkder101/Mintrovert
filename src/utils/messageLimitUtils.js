@@ -1,6 +1,6 @@
 // src/utils/messageLimitUtils.js
 import { rtdb } from '../firebase/config';
-import { ref, get, remove, query, orderByChild, update } from 'firebase/database';
+import { ref, get, update, query, orderByChild } from 'firebase/database';
 
 // Constants
 export const MESSAGE_LIMIT = 30; // Maximum number of messages to keep
