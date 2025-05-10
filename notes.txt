@@ -14,15 +14,40 @@ Use onDisconnect().remove() or temporary node strategy in Firebase. (24 hrs dele
 
 🔥 #10 add admin page. 
 
-Today 
-
 🧩 #13 if user delete account then confession , private chats , anyanomus name all needs to wipe out from database.
 
-🧩 #13 if user wants to delete account ask username and password in popup. 
+🧩 #17 Implement @mention in global chat input logic add highlight for that particular user. 
 
-🧩 #17 Implement @mention in global chat input logic
+🧩 #13 Help and support page UI glitch. mobile version also. 
 
 🧩 #18 Blocked unblocked messages UI upgradation. 
+
+🧩 # remove purpose section from profile setup.
+
+🧩 # if new user creates profile and enters into the global chat then it should show into the global chat 
+
+
+mobile version fix 
+
+🧩 # profile creation page can take whole screen space. & password eye is not showing.
+
+🧩 # 18 while entering OTP keyboard switches back to the characters after entering each number
+
+🧩 # after entering into global chat page on mobile version navbar disappears after scrolling
+
+🧩 # on global chat option navbar needs to stick to the top all the time. right now it disappears
+
+🧩 # input section should look little bit bigger.  
+
+🧩 # in global chat input section only appears after scrolling through all of the messages sent before. 
+
+
+
+
+
+
+
+
 
 
 

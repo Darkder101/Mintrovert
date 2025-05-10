@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { rtdb } from '../firebase/config';
 import { ref, push, onValue } from 'firebase/database';
 import { getDisplayName } from '../hooks/useAnonName'; // Import the helper function
+import { enforceMessageLimit } from '../utils/messageLimitUtils'; // Import the message limit utility
 
 const ChatBox = ({ user, conversationId, messages: initialMessages = [] }) => {
   const [newMessage, setNewMessage] = useState('');
@@ -76,7 +77,7 @@ const ChatBox = ({ user, conversationId, messages: initialMessages = [] }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (newMessage.trim() === '' || !currentUser) return;
     
@@ -105,6 +106,9 @@ const ChatBox = ({ user, conversationId, messages: initialMessages = [] }) => {
         type: 'text',
         timestamp: new Date().toISOString()
       });
+      
+      // Enforce message limit after sending to global chat
+      await enforceMessageLimit();
     }
     
     // Clear input field

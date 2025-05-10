@@ -3,7 +3,7 @@ import styles from './GlobalChat.module.css';
 import Navbar from '../components/Navbar';
 import { useAuth } from '../context/AuthContext';
 import { rtdb } from '../firebase/config';
-import { ref, push, onValue, set, query, orderByChild, startAt } from 'firebase/database';
+import { ref, push, onValue, set, query, orderByChild, startAt, remove, get } from 'firebase/database';
 import { useContext } from 'react';
 import { OnlineUsersContext } from '../App';
 import MessageBubble from '../components/MessageBubble';
@@ -28,6 +28,7 @@ const GlobalChat = () => {
   const [cursorPosition, setCursorPosition] = useState(0);
   const inputRef = useRef(null);
   const mentionsBoxRef = useRef(null);
+  const MESSAGE_LIMIT = 30; // Define the message limit constant
 
   useEffect(() => {
     // Set user ID and username
@@ -128,8 +129,40 @@ const GlobalChat = () => {
     setNewOption('');
     setShowPollModal(true);
   };
+  
+  // Function to remove old messages if there are more than the limit
+  const enforceMessageLimit = async () => {
+    const messagesRef = ref(rtdb, 'globalMessages');
+    const snapshot = await get(messagesRef);
+    
+    if (snapshot.exists()) {
+      const messagesData = snapshot.val();
+      const messageList = Object.keys(messagesData).map(key => ({
+        id: key,
+        ...messagesData[key]
+      }));
+      
+      // Sort messages by timestamp
+      messageList.sort((a, b) => {
+        return new Date(a.timestamp) - new Date(b.timestamp);
+      });
+      
+      // If we have more messages than the limit, remove the oldest ones
+      if (messageList.length > MESSAGE_LIMIT) {
+        const messagesToDelete = messageList.slice(0, messageList.length - MESSAGE_LIMIT);
+        
+        // Delete each old message
+        messagesToDelete.forEach(async (message) => {
+          const messageRef = ref(rtdb, `globalMessages/${message.id}`);
+          await remove(messageRef);
+        });
+        
+        console.log(`Deleted ${messagesToDelete.length} old messages to maintain limit of ${MESSAGE_LIMIT}`);
+      }
+    }
+  };
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (input.trim()) {
       // Use anonymous name if available, otherwise fall back to display name or user ID
       const displayName = anonName || (currentUser?.displayName || userId);
@@ -157,7 +190,10 @@ const GlobalChat = () => {
       
       // Push the message to Firebase Realtime Database
       const messagesRef = ref(rtdb, 'globalMessages');
-      push(messagesRef, messageData);
+      await push(messagesRef, messageData);
+      
+      // After sending the message, check and enforce the message limit
+      await enforceMessageLimit();
       
       setInput('');
     }
@@ -257,12 +293,12 @@ const GlobalChat = () => {
     setShowMentions(false);
   };
 
-  const handleImageUpload = (e) => {
+  const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
       if (['image/jpeg', 'image/png'].includes(file.type)) {
         const reader = new FileReader();
-        reader.onload = (event) => {
+        reader.onload = async (event) => {
           // Use anonymous name if available, otherwise fall back to display name or user ID
           const displayName = anonName || (currentUser?.displayName || userId);
           
@@ -276,7 +312,10 @@ const GlobalChat = () => {
           
           // Push the image to Firebase Realtime Database
           const messagesRef = ref(rtdb, 'globalMessages');
-          push(messagesRef, imageData);
+          await push(messagesRef, imageData);
+          
+          // After sending the image, check and enforce the message limit
+          await enforceMessageLimit();
         };
         reader.readAsDataURL(file);
       } else {
@@ -316,7 +355,7 @@ const GlobalChat = () => {
     }
   };
 
-  const createPoll = () => {
+  const createPoll = async () => {
     if (pollQuestion.trim() === '') {
       alert('Please enter a poll question');
       return;
@@ -351,7 +390,10 @@ const GlobalChat = () => {
     
     // Push the poll to Firebase Realtime Database
     const messagesRef = ref(rtdb, 'globalMessages');
-    push(messagesRef, pollData);
+    await push(messagesRef, pollData);
+    
+    // After creating the poll, check and enforce the message limit
+    await enforceMessageLimit();
     
     // Reset form and close modal
     setPollQuestion('');
