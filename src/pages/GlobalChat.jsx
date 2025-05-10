@@ -3,11 +3,12 @@ import styles from './GlobalChat.module.css';
 import Navbar from '../components/Navbar';
 import { useAuth } from '../context/AuthContext';
 import { rtdb } from '../firebase/config';
-import { ref, push, onValue, set, query, orderByChild, startAt, remove, get } from 'firebase/database';
+import { ref, push, onValue, set, query, orderByChild, startAt, get } from 'firebase/database';
 import { useContext } from 'react';
 import { OnlineUsersContext } from '../App';
 import MessageBubble from '../components/MessageBubble';
 import { filterSensitiveContent } from '../utils/filterUtils';
+import { enforceMessageLimit, MESSAGE_LIMIT } from '../utils/messageLimitUtils';
 
 const GlobalChat = () => {
   const { currentUser, anonName } = useAuth();
@@ -28,7 +29,6 @@ const GlobalChat = () => {
   const [cursorPosition, setCursorPosition] = useState(0);
   const inputRef = useRef(null);
   const mentionsBoxRef = useRef(null);
-  const MESSAGE_LIMIT = 30; // Define the message limit constant
 
   useEffect(() => {
     // Set user ID and username
@@ -82,6 +82,22 @@ const GlobalChat = () => {
       }
     });
 
+    // Initial check of message count
+    const checkMessageCount = async () => {
+      const messagesRef = ref(rtdb, 'globalMessages');
+      const snapshot = await get(messagesRef);
+      
+      if (snapshot.exists()) {
+        const messagesCount = Object.keys(snapshot.val()).length;
+        if (messagesCount > MESSAGE_LIMIT) {
+          console.log(`Initial message count (${messagesCount}) exceeds limit (${MESSAGE_LIMIT}), enforcing limit...`);
+          await enforceMessageLimit();
+        }
+      }
+    };
+    
+    checkMessageCount();
+
     // Cleanup on unmount
     return () => {
       unsubscribe();
@@ -129,38 +145,6 @@ const GlobalChat = () => {
     setNewOption('');
     setShowPollModal(true);
   };
-  
-  // Function to remove old messages if there are more than the limit
-  const enforceMessageLimit = async () => {
-    const messagesRef = ref(rtdb, 'globalMessages');
-    const snapshot = await get(messagesRef);
-    
-    if (snapshot.exists()) {
-      const messagesData = snapshot.val();
-      const messageList = Object.keys(messagesData).map(key => ({
-        id: key,
-        ...messagesData[key]
-      }));
-      
-      // Sort messages by timestamp
-      messageList.sort((a, b) => {
-        return new Date(a.timestamp) - new Date(b.timestamp);
-      });
-      
-      // If we have more messages than the limit, remove the oldest ones
-      if (messageList.length > MESSAGE_LIMIT) {
-        const messagesToDelete = messageList.slice(0, messageList.length - MESSAGE_LIMIT);
-        
-        // Delete each old message
-        messagesToDelete.forEach(async (message) => {
-          const messageRef = ref(rtdb, `globalMessages/${message.id}`);
-          await remove(messageRef);
-        });
-        
-        console.log(`Deleted ${messagesToDelete.length} old messages to maintain limit of ${MESSAGE_LIMIT}`);
-      }
-    }
-  };
 
   const sendMessage = async () => {
     if (input.trim()) {
@@ -192,8 +176,12 @@ const GlobalChat = () => {
       const messagesRef = ref(rtdb, 'globalMessages');
       await push(messagesRef, messageData);
       
-      // After sending the message, check and enforce the message limit
-      await enforceMessageLimit();
+      // After sending, the server-side trigger will enforce the message limit
+      // but we'll also check client-side as a fallback
+      const messagesSnapshot = await get(messagesRef);
+      if (messagesSnapshot.exists() && Object.keys(messagesSnapshot.val()).length > MESSAGE_LIMIT) {
+        await enforceMessageLimit();
+      }
       
       setInput('');
     }
@@ -314,8 +302,12 @@ const GlobalChat = () => {
           const messagesRef = ref(rtdb, 'globalMessages');
           await push(messagesRef, imageData);
           
-          // After sending the image, check and enforce the message limit
-          await enforceMessageLimit();
+          // After sending, the server-side trigger will enforce the message limit
+          // but we'll also check client-side as a fallback
+          const messagesSnapshot = await get(messagesRef);
+          if (messagesSnapshot.exists() && Object.keys(messagesSnapshot.val()).length > MESSAGE_LIMIT) {
+            await enforceMessageLimit();
+          }
         };
         reader.readAsDataURL(file);
       } else {
@@ -392,8 +384,12 @@ const GlobalChat = () => {
     const messagesRef = ref(rtdb, 'globalMessages');
     await push(messagesRef, pollData);
     
-    // After creating the poll, check and enforce the message limit
-    await enforceMessageLimit();
+    // After creating the poll, the server-side trigger will enforce the message limit
+    // but we'll also check client-side as a fallback
+    const messagesSnapshot = await get(messagesRef);
+    if (messagesSnapshot.exists() && Object.keys(messagesSnapshot.val()).length > MESSAGE_LIMIT) {
+      await enforceMessageLimit();
+    }
     
     // Reset form and close modal
     setPollQuestion('');

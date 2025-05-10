@@ -1,12 +1,13 @@
 // src/utils/messageLimitUtils.js
 import { rtdb } from '../firebase/config';
-import { ref, get, remove, query, orderByChild } from 'firebase/database';
+import { ref, get, remove, query, orderByChild, update } from 'firebase/database';
 
 // Constants
 export const MESSAGE_LIMIT = 30; // Maximum number of messages to keep
 
 /**
  * Enforces the message limit for global chat by deleting oldest messages if needed
+ * This is a client-side fallback for the server-side enforcement
  * @returns {Promise<number>} Number of deleted messages
  */
 export const enforceMessageLimit = async () => {
@@ -37,11 +38,17 @@ export const enforceMessageLimit = async () => {
     // Calculate how many messages to delete
     const messagesToDelete = messages.slice(0, messages.length - MESSAGE_LIMIT);
     
-    // Delete each old message
+    // Create a batch update to delete all messages at once
+    const updates = {};
+    
+    // Add each message to delete to the updates object
     for (const message of messagesToDelete) {
-      const messageRef = ref(rtdb, `globalMessages/${message.id}`);
-      await remove(messageRef);
+      updates[`globalMessages/${message.id}`] = null;
     }
+    
+    // Perform the batch delete operation
+    const rootRef = ref(rtdb);
+    await update(rootRef, updates);
     
     console.log(`Deleted ${messagesToDelete.length} old messages to maintain limit of ${MESSAGE_LIMIT}`);
     return messagesToDelete.length;

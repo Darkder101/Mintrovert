@@ -29,6 +29,31 @@ const initMessageCleanupService = () => {
       console.error('Error during message limit enforcement:', error);
     }
   });
+
+  // Set up a database trigger for real-time message limit enforcement
+  setupMessageLimitTrigger();
+};
+
+// Function to set up a trigger that watches for new messages and enforces limits
+const setupMessageLimitTrigger = () => {
+  const messagesRef = admin.database().ref('globalMessages');
+  
+  // Watch for child_added events
+  messagesRef.on('child_added', async (snapshot) => {
+    try {
+      // Get the count of messages
+      const countSnapshot = await messagesRef.once('value');
+      const messageCount = countSnapshot.numChildren();
+      
+      // If we exceed the limit, enforce it immediately
+      if (messageCount > MESSAGE_LIMIT) {
+        console.log(`New message added, total count: ${messageCount}, enforcing limit...`);
+        await enforceMessageLimit();
+      }
+    } catch (error) {
+      console.error('Error in real-time message limit enforcement:', error);
+    }
+  });
 };
 
 // Function to clean up messages older than 24 hours
